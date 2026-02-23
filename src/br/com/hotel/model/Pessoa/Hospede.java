@@ -1,3 +1,4 @@
+package src.br.com.hotel.model.Pessoa;
 public class Hospede extends Pessoa {
     private String numFidelidade;
 
@@ -6,8 +7,12 @@ public class Hospede extends Pessoa {
         this.numFidelidade = num;
     }
 
-    public void exibir(){
-        super.exibir();
-        System.out.printf("Número de Fidelidade: %s\n", this.numFidelidade);
+    public String getNumFidelidade() {
+        return numFidelidade;
     }
+
+    public void setNumFidelidade(String numFidelidade) {
+        this.numFidelidade = numFidelidade;
+    }
+
 }
