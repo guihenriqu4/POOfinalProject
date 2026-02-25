@@ -1,35 +1,105 @@
 package src.br.com.hotel.services;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.br.com.hotel.model.Quarto.ChaleFamilia;
+import src.br.com.hotel.model.Pessoa.Administrador;
+import src.br.com.hotel.model.Pessoa.Funcionario;
+import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.Quarto;
-import src.br.com.hotel.model.Quarto.QuartoPadrao;
-import src.br.com.hotel.model.Quarto.SuiteLuxo;
 
 public class Hotel {
     private String nome;
-    List<Quarto> quartos;
+    private List<Hospede> hospedes;
+    private Administrador adm;
+    private List<Funcionario> funcionarios;
+    private List<Quarto> quartos;
+    private List<Reserva> reservasAtivas;
 
-    public Hotel(String nome){
+    public Hotel(String nome, Administrador adm){
         this.nome = nome;
-
-        this.quartos = new ArrayList<Quarto>();
-
-        this.quartos.add(new QuartoPadrao(60, "Quarto básico com uma cama de casal, uma televisão, guarda-roupa e roupa de cama, bem como banheiro equipado com toalhas."));
-        this.quartos.add(new SuiteLuxo(250, "Suíte de luxo dotada de cama Queen Size e roupa de cama, jacuzzi, televisão, cadeira de massagem e dois banheiros equipados com toalhas"));
-        this.quartos.add(new ChaleFamilia(120, "Chale confortável para a família dotado de duas televisões, cozinha com fogão para preparo de alimentações, roupa de cama e dois banheiros equipados com toalhas", 3));
+        this.adm = adm;
+        this.hospedes = new ArrayList<>();
+        this.funcionarios = new ArrayList<>();
+        this.quartos = new ArrayList<>();
+        this.reservasAtivas = new ArrayList<>();
     }
 
-    public void exibirDados(){
-        System.out.println("Nome hotel: " + this.nome);
-        System.out.println("-".repeat(50));
-        System.out.println("Informações dos quartos: ");
-        System.out.println("");
-        for(int i = 0; i < this.quartos.size(); i++){
-            quartos.get(i).exibir();
-        }
+    public void addHospede(Hospede h){
+        this.hospedes.add(h);
     }
 
+    public void addFuncionario(Funcionario f){
+        this.funcionarios.add(f);
+    }
+
+    public void addQuarto(Quarto q){
+        this.quartos.add(q);
+    }
+
+    public Reserva realizarCheckIn(Hospede h, Funcionario r, Quarto q, LocalDate out){
+        Reserva novaReserva = new Reserva(h, r, q, LocalDate.now(), out);
+        this.reservasAtivas.add(novaReserva);
+        return novaReserva;
+    }
+
+    public void realizarCheckOut(Reserva r){
+        r.finalizar();
+        this.reservasAtivas.remove(r);
+    }
+
+    public void salvarDados(){}
+
+    public void carregarDados(){}
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public List<Hospede> getHospedes() {
+        return hospedes;
+    }
+
+    public void setHospedes(List<Hospede> hospedes) {
+        this.hospedes = hospedes;
+    }
+
+    public Administrador getAdm() {
+        return adm;
+    }
+
+    public void setAdm(Administrador adm) {
+        this.adm = adm;
+    }
+
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+
+    public List<Quarto> getQuartos() {
+        return quartos;
+    }
+
+    public void setQuartos(List<Quarto> quartos) {
+        this.quartos = quartos;
+    }
+
+    public List<Reserva> getReservasAtivas() {
+        return reservasAtivas;
+    }
+
+    public void setReservasAtivas(List<Reserva> reservasAtivas) {
+        this.reservasAtivas = reservasAtivas;
+    }
+    
     
 }

@@ -15,4 +15,8 @@ public class Hospede extends Pessoa {
         this.numFidelidade = numFidelidade;
     }
 
+    public void exibir(){
+        System.out.printf("Número: %s\n", this.numFidelidade);
+        super.exibir();
+    }
 }

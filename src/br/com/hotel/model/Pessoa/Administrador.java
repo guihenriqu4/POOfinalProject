@@ -15,4 +15,8 @@ public class Administrador extends Funcionario {
         this.nivelAcesso = nivelAcesso;
     }
     
+    public void exibir(){
+        super.exibir();
+        System.out.println("Nível de Acesso: " + this.nivelAcesso);
+    }
 }

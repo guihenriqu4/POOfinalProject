@@ -38,4 +38,10 @@ public class Funcionario extends Pessoa {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    public void exibir(){
+        super.exibir();
+        System.out.println("Salário: " + this.salario);
+        System.out.println("Setor: " + this.setor);
+    }
 }
