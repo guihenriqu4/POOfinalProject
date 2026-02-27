@@ -12,6 +12,7 @@ import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.Quarto;
+import src.br.com.hotel.services.Reserva;
 
 public class Hotel {
     private String nome;
@@ -42,8 +43,8 @@ public class Hotel {
         this.quartos.add(q);
     }
 
-    public Reserva realizarReserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out){
-        Reserva novaReserva = new Reserva(h, r, q, in, out);
+    public Reserva realizarReserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out, String horario){
+        Reserva novaReserva = new Reserva(h, r, q, in, out, horario);
         this.reservasAtivas.add(novaReserva);
         return novaReserva;
     }

@@ -20,14 +20,16 @@ public class Reserva {
 
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private String horario;
     private boolean statusPagamento;
 
-    public Reserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out){
+    public Reserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out, String horario){
         this.hospede = h;
         this.responsavel = r;
         this.quarto = q;
         this.checkIn = in;
         this.checkOut = out;
+        this.horario = horario;
 
         this.statusPagamento = false;
         this.servicos = new ArrayList<>();
@@ -108,6 +110,10 @@ public class Reserva {
     public void setCheckOut(LocalDate checkOut) {
         this.checkOut = checkOut;
     }
+
+    public String getHorario() { return horario; }
+
+    public void setHorario(String horario) { this.horario = horario; }
 
     public boolean isStatusPagamento() {
         return statusPagamento;
