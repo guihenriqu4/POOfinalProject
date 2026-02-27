@@ -3,12 +3,15 @@ public class Funcionario extends Pessoa {
     private double salario;
     private String setor;
     private String senha;
+    private final int nivelAcesso;
+
 
     public Funcionario(String n, String cpf, String e, String c, double s, String setor, String senha){
         super(n, cpf, e, c);
         this.salario = s;
         this.setor = setor;
         this.senha = senha;
+        this.nivelAcesso = 0;
     }
 
     public boolean autenticar(String senhaDigitada){
@@ -37,6 +40,10 @@ public class Funcionario extends Pessoa {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public int getNivelAcesso() {
+        return nivelAcesso;
     }
 
     public void exibir(){

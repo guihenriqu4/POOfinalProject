@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.br.com.hotel.exceptions.CalculoTotalException;
+import src.br.com.hotel.exceptions.FinalizacaoException;
+import src.br.com.hotel.exceptions.NivelAcessoException;
+import src.br.com.hotel.exceptions.ReservaInexistenteException;
 import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
@@ -38,15 +42,46 @@ public class Hotel {
         this.quartos.add(q);
     }
 
-    public Reserva realizarCheckIn(Hospede h, Funcionario r, Quarto q, LocalDate out){
-        Reserva novaReserva = new Reserva(h, r, q, LocalDate.now(), out);
+    public Reserva realizarReserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out){
+        Reserva novaReserva = new Reserva(h, r, q, in, out);
         this.reservasAtivas.add(novaReserva);
         return novaReserva;
     }
 
+    public void realizarCheckIn(Hospede h){
+        try{
+            Reserva ativar = null;
+            for(Reserva r : reservasAtivas){
+                if(h == r.getHospede()){
+                    ativar = r;
+                }
+            }
+            if(ativar == null){
+                throw new ReservaInexistenteException("O hospéde informado não possui reserva ativa.");
+            }
+
+        } catch(ReservaInexistenteException e){
+            System.out.println(e.getMessage());
+        }
+
+        
+    }
+
     public void realizarCheckOut(Reserva r){
-        r.finalizar();
-        this.reservasAtivas.remove(r);
+        try{
+            System.out.println(r.calcularTotal());
+            r.setStatusPagamento(true);
+
+
+            r.finalizar();
+            this.reservasAtivas.remove(r);
+
+        } catch (FinalizacaoException e){
+            System.out.println(e.getMessage());
+
+        } catch (CalculoTotalException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void salvarDados(){}

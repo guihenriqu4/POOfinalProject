@@ -6,6 +6,6 @@ public class SuiteLuxo extends Quarto{
 
     @Override
     public double calcularValor(int dias) {
-        return (getValorBase() * dias) * 1.20; // 20% de taxa de luxo
+        return (getValorBase() * dias) * 0.2; // 20% de taxa de luxo
     }
 }

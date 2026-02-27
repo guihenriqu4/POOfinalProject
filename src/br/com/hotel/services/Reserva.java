@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.br.com.hotel.exceptions.CalculoTotalException;
+import src.br.com.hotel.exceptions.FinalizacaoException;
 import src.br.com.hotel.model.ServicosQuarto;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
@@ -37,7 +39,7 @@ public class Reserva {
         this.servicos.add(s);
     }
 
-    public double calcularTotal(){
+    public double calcularTotal() throws CalculoTotalException {
         int dias = (int) ChronoUnit.DAYS.between(checkIn, checkOut);
         if (dias <= 0) dias = 1; // Seta 1 diária como padrão
 
@@ -48,12 +50,15 @@ public class Reserva {
             totalServicos += s.getValor();
         }
 
+        if((total + totalServicos) <= 0 ) throw new CalculoTotalException("Erro ao calcular valor total de pagamento, verifique as informações e tente novamente!");
+
         return total + totalServicos;
     }
 
-    public void finalizar(){
-        this.statusPagamento = true;
+    public void finalizar() throws FinalizacaoException {
         this.quarto.liberarQuarto();
+
+        if(this.quarto.isOcupado()) throw new FinalizacaoException("Erro ao liberar quarto. Tente novamente!");
     }
 
     public Hospede getHospede() {
