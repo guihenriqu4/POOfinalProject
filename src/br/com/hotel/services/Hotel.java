@@ -7,21 +7,25 @@ import java.util.List;
 
 import src.br.com.hotel.exceptions.CalculoTotalException;
 import src.br.com.hotel.exceptions.FinalizacaoException;
-import src.br.com.hotel.exceptions.NivelAcessoException;
 import src.br.com.hotel.exceptions.ReservaInexistenteException;
 import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.Quarto;
-import src.br.com.hotel.services.Reserva;
 
+// Gerenciador central do Banco de Dados em Memória
 public class Hotel implements Serializable{
     private String nome;
-    private List<Hospede> hospedes;
     private Administrador adm;
-    private List<Funcionario> funcionarios;
-    private List<Quarto> quartos;
+    
+    // Listas globais do sistema
+    private List<Hospede> hospedes; // AGREGAÇÃO
+    private List<Funcionario> funcionarios; // AGREGAÇÃO
+    private List<Quarto> quartos; // COMPOSIÇÃO
     private List<Reserva> reservasAtivas;
+
+    // Nome do arquivo de persistência
+    private static final String ARQUIVO_DADOS = "dados_do_hotel.dat";
 
     public Hotel(String nome, Administrador adm){
         this.nome = nome;
@@ -32,20 +36,12 @@ public class Hotel implements Serializable{
         this.reservasAtivas = new ArrayList<>();
     }
 
-    private static final String ARQUIVO_DADOS = "dados_do_hotel.dat";
+    // Adiciona instâncias nas listas
+    public void addHospede(Hospede h){ this.hospedes.add(h); }
+    public void addFuncionario(Funcionario f){ this.funcionarios.add(f); }
+    public void addQuarto(Quarto q){ this.quartos.add(q); }
 
-    public void addHospede(Hospede h){
-        this.hospedes.add(h);
-    }
-
-    public void addFuncionario(Funcionario f){
-        this.funcionarios.add(f);
-    }
-
-    public void addQuarto(Quarto q){
-        this.quartos.add(q);
-    }
-
+    // Cria reserva e injeta na lista
     public Reserva realizarReserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out, String horario){
         Reserva novaReserva = new Reserva(h, r, q, in, out, horario);
         this.reservasAtivas.add(novaReserva);
@@ -63,12 +59,9 @@ public class Hotel implements Serializable{
             if(ativar == null){
                 throw new ReservaInexistenteException("O hospéde informado não possui reserva ativa.");
             }
-
         } catch(ReservaInexistenteException e){
             System.out.println(e.getMessage());
         }
-
-        
     }
 
     public void realizarCheckOut(Reserva r){
@@ -76,18 +69,15 @@ public class Hotel implements Serializable{
             System.out.println(r.calcularTotal());
             r.setStatusPagamento(true);
 
+            r.finalizar(); // Libera o quarto
+            this.reservasAtivas.remove(r); // Tira a reserva da memória
 
-            r.finalizar();
-            this.reservasAtivas.remove(r);
-
-        } catch (FinalizacaoException e){
-            System.out.println(e.getMessage());
-
-        } catch (CalculoTotalException e){
+        } catch (FinalizacaoException | CalculoTotalException e){
             System.out.println(e.getMessage());
         }
     }
 
+    // PERSISTÊNCIA: Transforma as listas em fluxo de bytes e salva no arquivo local
     public void salvarDados(){
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO_DADOS))) {
             oos.writeObject(this.hospedes);
@@ -100,10 +90,12 @@ public class Hotel implements Serializable{
         }
     }
 
+    // PERSISTÊNCIA: Lê o fluxo de bytes do arquivo e popula as listas ao abrir o app
+    @SuppressWarnings("unchecked")
     public void carregarDados(){
         File arquivo = new File(ARQUIVO_DADOS);
         if (!arquivo.exists()) {
-            return; // Se é a primeira vez rodando, o arquivo não existe, então ignora
+            return; // Se não houver dados, simplesmente ignora e segue a vida
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO_DADOS))) {
             this.hospedes = (List<Hospede>) ois.readObject();
@@ -116,53 +108,13 @@ public class Hotel implements Serializable{
         }
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public List<Hospede> getHospedes() {
-        return hospedes;
-    }
-
-    public void setHospedes(List<Hospede> hospedes) {
-        this.hospedes = hospedes;
-    }
-
-    public Administrador getAdm() {
-        return adm;
-    }
-
-    public void setAdm(Administrador adm) {
-        this.adm = adm;
-    }
-
-    public List<Funcionario> getFuncionarios() {
-        return funcionarios;
-    }
-
-    public void setFuncionarios(List<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
-    }
-
-    public List<Quarto> getQuartos() {
-        return quartos;
-    }
-
-    public void setQuartos(List<Quarto> quartos) {
-        this.quartos = quartos;
-    }
-
-    public List<Reserva> getReservasAtivas() {
-        return reservasAtivas;
-    }
-
-    public void setReservasAtivas(List<Reserva> reservasAtivas) {
-        this.reservasAtivas = reservasAtivas;
-    }
-    
-    
+    // Getters e Setters
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public List<Hospede> getHospedes() { return hospedes; }
+    public Administrador getAdm() { return adm; }
+    public void setAdm(Administrador adm) { this.adm = adm; }
+    public List<Funcionario> getFuncionarios() { return funcionarios; }
+    public List<Quarto> getQuartos() { return quartos; }
+    public List<Reserva> getReservasAtivas() { return reservasAtivas; }
 }

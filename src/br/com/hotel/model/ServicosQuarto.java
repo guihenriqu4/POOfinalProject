@@ -1,8 +1,8 @@
 package src.br.com.hotel.model;
 import java.io.Serializable;
-
 import java.time.LocalDate;
 
+// Classe que representa itens consumidos na hospedagem
 public class ServicosQuarto implements Serializable {
     private String descricao;
     private double valor;
@@ -11,32 +11,16 @@ public class ServicosQuarto implements Serializable {
     public ServicosQuarto(String d, double v){
         this.descricao = d;
         this.valor = v;
-        this.dataSolicitacao = LocalDate.now();
+        this.dataSolicitacao = LocalDate.now(); // Grava a data no momento do pedido
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public LocalDate getDataSolicitacao() {
-        return dataSolicitacao;
-    }
-
-    public void setDataSolicitacao(LocalDate dataSolicitacao) {
-        this.dataSolicitacao = dataSolicitacao;
-    }
+    // Getters e Setters
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public double getValor() { return valor; }
+    public void setValor(double valor) { this.valor = valor; }
+    public LocalDate getDataSolicitacao() { return dataSolicitacao; }
+    public void setDataSolicitacao(LocalDate dataSolicitacao) { this.dataSolicitacao = dataSolicitacao; }
 
     public void exibir(){
         System.out.println("Descrição: " + this.descricao);

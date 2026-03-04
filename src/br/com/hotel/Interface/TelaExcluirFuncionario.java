@@ -7,6 +7,7 @@ import src.br.com.hotel.services.Hotel;
 import javax.swing.*;
 import java.awt.*;
 
+// Tela de demissão acessível apenas por administradores
 public class TelaExcluirFuncionario {
 
     public static JPanel criarPainel(Hotel hotel, Funcionario usuarioLogado) {
@@ -29,14 +30,14 @@ public class TelaExcluirFuncionario {
         painel.add(painelCentro, BorderLayout.CENTER);
 
         JButton btnExcluir = new JButton("Excluir Funcionário do Sistema");
-        btnExcluir.setBackground(new Color(94, 0, 0)); // Cor vermelha
+        btnExcluir.setBackground(new Color(94, 0, 0)); // Cor vermelha para indicar perigo
         btnExcluir.setForeground(Color.RED);
 
-        // Preenche a lista com o Nome e CPF, escondendo quem está logado no momento
+        // Preenche a lista ocultando o próprio usuário logado para ele não se excluir
         Runnable atualizarCaixa = () -> {
             comboFuncionarios.removeAllItems();
             for (Funcionario f : hotel.getFuncionarios()) {
-                if (!f.getCpf().equals(usuarioLogado.getCpf())) { // Impede de excluir a si mesmo
+                if (!f.getCpf().equals(usuarioLogado.getCpf())) { 
                     comboFuncionarios.addItem(f.getNome() + " (CPF: " + f.getCpf() + ")");
                 }
             }
@@ -45,6 +46,7 @@ public class TelaExcluirFuncionario {
         atualizarCaixa.run();
         btnAtualizar.addActionListener(e -> atualizarCaixa.run());
 
+        // Confirmação e exclusão real da lista do hotel
         btnExcluir.addActionListener(e -> {
             String selecionado = (String) comboFuncionarios.getSelectedItem();
             if (selecionado == null) {
@@ -59,7 +61,7 @@ public class TelaExcluirFuncionario {
             if (confirmacao == JOptionPane.YES_OPTION) {
                 Funcionario funcionarioParaRemover = null;
                 for (Funcionario f : hotel.getFuncionarios()) {
-                    if (selecionado.contains(f.getCpf())) { // Busca pelo CPF que está dentro da String
+                    if (selecionado.contains(f.getCpf())) { // Mapeia pelo CPF na String
                         funcionarioParaRemover = f;
                         break;
                     }
@@ -68,7 +70,7 @@ public class TelaExcluirFuncionario {
                 if (funcionarioParaRemover != null) {
                     hotel.getFuncionarios().remove(funcionarioParaRemover);
                     JOptionPane.showMessageDialog(painel, "Funcionário excluído com sucesso!");
-                    atualizarCaixa.run();
+                    atualizarCaixa.run(); // Refaz a lista sem ele
                 }
             }
         });

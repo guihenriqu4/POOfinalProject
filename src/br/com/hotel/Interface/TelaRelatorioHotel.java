@@ -14,12 +14,14 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+// Relatório complexo exigido pelas diretrizes do sistema para funcionários
 public class TelaRelatorioHotel {
 
     public static JPanel criarPainel(Hotel hotel) {
         JPanel painel = new JPanel(new BorderLayout(10, 10));
         painel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Componente de seleção de data para auditar o status do hotel num dia específico
         JPanel painelFiltro = new JPanel(new FlowLayout(FlowLayout.LEFT));
         painelFiltro.add(new JLabel("Selecione uma data para verificar os quartos:"));
 
@@ -50,6 +52,7 @@ public class TelaRelatorioHotel {
             // --- BLOCO 1: DESCRIÇÃO ÚNICA DOS QUARTOS ---
             sb.append(">> GUIA DE ACOMODAÇÕES:\n");
             boolean descPadrao = false, descSuite = false, descChale = false;
+            // Varre até achar uma ocorrência de cada quarto para imprimir a descrição
             for (Quarto q : hotel.getQuartos()) {
                 if (!descPadrao && q instanceof QuartoPadrao) {
                     sb.append(" • Padrão: ").append(q.getDescricao()).append("\n");
@@ -79,9 +82,11 @@ public class TelaRelatorioHotel {
 
             sb.append(">> QUARTOS RESERVADOS/OCUPADOS:\n");
 
+            // Varre fisicamente todos os quartos
             for (Quarto q : hotel.getQuartos()) {
                 Reserva reservaEncontrada = null;
 
+                // Verifica se há alguma reserva ativa cruzando com o quarto selecionado nas datas informadas
                 for (Reserva r : hotel.getReservasAtivas()) {
                     if (r.getQuarto().equals(q)) {
                         if (!dataConsulta.isBefore(r.getCheckIn()) && !dataConsulta.isAfter(r.getCheckOut())) {
@@ -93,10 +98,9 @@ public class TelaRelatorioHotel {
 
                 if (reservaEncontrada != null) {
                     reservados++;
-                    // Não escrevemos mais a descrição aqui!
                     sb.append(" • [").append(q.getClass().getSimpleName()).append("] ");
 
-                    // SE FOR CHALÉ, AVISA A QUANTIDADE DE CAMAS!
+                    // Cast para acessar informações exclusivas do Chalé
                     if (q instanceof ChaleFamilia) {
                         ChaleFamilia chale = (ChaleFamilia) q;
                         sb.append("(Camas: ").append(chale.getCamasSolteiro()).append(" Solteiro, ")
@@ -114,7 +118,8 @@ public class TelaRelatorioHotel {
                         sb.append(" | Valor da Hospedagem: [Erro no Cálculo]");
                     }
 
-                    sb.append("\n   Email: "). append(reservaEncontrada.getHospede().getEmail())
+                    // Exibição dos dados do cliente logado na reserva
+                    sb.append("\n   Email: ").append(reservaEncontrada.getHospede().getEmail())
                             .append(" | CPF: ").append(reservaEncontrada.getHospede().getCpf())
                             .append(" | Celular: ").append(reservaEncontrada.getHospede().getCelular())
                             .append("\n\n");
@@ -130,7 +135,7 @@ public class TelaRelatorioHotel {
                 sb.append("   Nenhum quarto reservado para esta data.\n\n");
             }
 
-            // --- BLOCO 3: VAGAS ---
+            // --- BLOCO 3: VAGAS DISPONÍVEIS ---
             sb.append(">> DISPONIBILIDADE DE QUARTOS LIVRES:\n");
             sb.append(" • Quartos Padrão Livres: ").append(padraoLivre).append("\n");
             sb.append(" • Suítes Luxo Livres: ").append(suiteLivre).append("\n");

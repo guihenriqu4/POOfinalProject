@@ -1,6 +1,8 @@
 package src.br.com.hotel.exceptions;
 
+// Cria uma classe de exceção personalizada herdando do Exception padrão do Java
 public class CalculoTotalException extends Exception {
+    // Construtor que recebe a mensagem de erro e passa para a superclasse
     public CalculoTotalException(String m){
         super(m);
     }

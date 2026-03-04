@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
+// Tela de self-service exclusiva para clientes logados
 public class TelaMinhasReservas {
 
     public static JPanel criarPainel(Hotel hotel, Hospede hospedeLogado) {
@@ -25,6 +26,7 @@ public class TelaMinhasReservas {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         StringBuilder relatorio = new StringBuilder();
 
+        // Filtra a lista do hotel para mostrar APENAS as que batem com o usuário logado
         boolean temReserva = false;
         for (Reserva r : hotel.getReservasAtivas()) {
             if (r.getHospede().equals(hospedeLogado)) {
@@ -47,6 +49,7 @@ public class TelaMinhasReservas {
         txtReservas.setText(relatorio.toString());
         painel.add(new JScrollPane(txtReservas), BorderLayout.CENTER);
 
+        // Botão apenas informativo
         JButton btnAjuda = new JButton("Solicitar ajuda de um funcionário para editar reserva");
         btnAjuda.addActionListener(e -> {
             JOptionPane.showMessageDialog(painel,

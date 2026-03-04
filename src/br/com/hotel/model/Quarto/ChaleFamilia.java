@@ -10,22 +10,18 @@ public class ChaleFamilia extends Quarto{
         this.camasCasal = 0;
     }
 
+    // Método acessado pela interface para definir camas extras
     public void setCamas(int solteiro, int casal) {
         this.camasSolteiro = solteiro;
         this.camasCasal = casal;
     }
 
-    public int getCamasSolteiro() {
-        return camasSolteiro;
-    }
+    public int getCamasSolteiro() { return camasSolteiro; }
+    public int getCamasCasal() { return camasCasal; }
 
-    public int getCamasCasal() {
-        return camasCasal;
-    }
-
+    // Aplica a lógica de taxas por camas extras
     @Override
     public double calcularValor(int dias) {
-        // Taxa fixa de R$ 50 por cama extra por dia
         int totalCamasEquivalente = camasSolteiro + (camasCasal * 2);
         return (getValorBase() * dias) + (20.00 * totalCamasEquivalente);
     }

@@ -17,6 +17,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+// Interface principal onde a recepção cadastra novos clientes e cria reservas simultaneamente
 public class TelaCadastroHospede {
 
     public static JPanel criarPainel(Hotel hotel, Funcionario responsavel) {
@@ -25,6 +26,7 @@ public class TelaCadastroHospede {
 
         JPanel painelFormulario = new JPanel(new GridLayout(12, 2, 10, 10));
 
+        // Reutiliza campos básicos
         JTextField[] camposPessoa = UtilidadesInterface.BasePessoa(painelFormulario);
 
         JTextField txtsenhaHospede = new JTextField();
@@ -33,6 +35,7 @@ public class TelaCadastroHospede {
 
         JComboBox<String> comboTiposQuarto = new JComboBox<>();
 
+        // Função que varre a lista de quartos e contabiliza quantos estão desocupados de cada tipo
         Runnable atualizarQuartos = () -> {
             comboTiposQuarto.removeAllItems();
             int padrao = 0, suite = 0, chale = 0;
@@ -60,6 +63,7 @@ public class TelaCadastroHospede {
         painelFormulario.add(new JLabel("Tipo de Quarto:"));
         painelFormulario.add(painelQuartoLivre);
 
+        // Painel extra que só aparece se for Chalé Família
         JLabel lblCamas = new JLabel("Configuração das Camas:");
         JPanel painelCamas = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         JComboBox<Integer> comboSolteiro = new JComboBox<>(new Integer[]{0, 1, 2, 3, 4, 5, 6});
@@ -71,6 +75,7 @@ public class TelaCadastroHospede {
         lblCamas.setVisible(false);
         painelCamas.setVisible(false);
 
+        // Listener que esconde ou mostra a seleção de camas baseado na escolha da combobox
         comboTiposQuarto.addItemListener(e -> {
             if (comboTiposQuarto.getSelectedItem() != null) {
                 boolean isChale = comboTiposQuarto.getSelectedItem().toString().contains("Chalé");
@@ -82,6 +87,7 @@ public class TelaCadastroHospede {
         painelFormulario.add(lblCamas);
         painelFormulario.add(painelCamas);
 
+        // Seletor de Datas nativo do Java
         JSpinner spinnerDataInicio = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor dateEditorInicio = new JSpinner.DateEditor(spinnerDataInicio, "dd/MM/yyyy");
         spinnerDataInicio.setEditor(dateEditorInicio);
@@ -107,6 +113,21 @@ public class TelaCadastroHospede {
         JLabel label2 = new JLabel("Mais de um dia de hospedagem?");
         JCheckBox MaisDeumdia = new JCheckBox("Sim");
 
+        // --- CARDÁPIO DE SERVIÇOS ---
+        JLabel lblServicos = new JLabel("Serviços de Quarto Adicionais:");
+        
+        JCheckBox chkAgua = new JCheckBox("Água Mineral (R$ 5,00)");
+        JCheckBox chkLavanderia = new JCheckBox("Lavanderia (R$ 35,00)");
+        JCheckBox chkFrigobar = new JCheckBox("Frigobar Completo (R$ 80,00)");
+
+        JPanel painelServicos = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        painelServicos.add(chkAgua);
+        painelServicos.add(chkLavanderia);
+        painelServicos.add(chkFrigobar);
+
+        painelFormulario.add(lblServicos);
+        painelFormulario.add(painelServicos);
+
         JPanel painelDatas = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         painelDatas.setVisible(false);
 
@@ -117,6 +138,7 @@ public class TelaCadastroHospede {
         painelDatas.add(new JLabel("Data de saída:"));
         painelDatas.add(spinnerDataFim);
 
+        // Mostra a data final apenas se o cliente for ficar mais de 1 dia
         MaisDeumdia.addItemListener(e -> {
             painelDatas.setVisible(MaisDeumdia.isSelected());
             painelDatas.revalidate(); painelDatas.repaint();
@@ -133,11 +155,13 @@ public class TelaCadastroHospede {
 
         JButton btnCalcular = new JButton("Calcular Valor");
 
+        // Função para prever o valor financeiro chamando o método polimórfico de calcularValor
         btnCalcular.addActionListener(e -> {
             String tipoSelecionado = (String) comboTiposQuarto.getSelectedItem();
             if (tipoSelecionado == null) return;
 
             Quarto quartoParaSimulacao = null;
+            // Encontra um quarto compatível apenas para simular preço
             for (Quarto q : hotel.getQuartos()) {
                 if (!q.isOcupado()) {
                     if (tipoSelecionado.contains("Padrão") && q instanceof QuartoPadrao) { quartoParaSimulacao = q; break; }
@@ -155,7 +179,6 @@ public class TelaCadastroHospede {
                         JOptionPane.showMessageDialog(painelCadastro, "Capacidade excedida para o Chalé (Max: 6 equivalentes).", "Aviso", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-                    // AQUI USAMOS O NOVO MÉTODO DO MODELO
                     ((ChaleFamilia) quartoParaSimulacao).setCamas(solteiro, casal);
                 }
 
@@ -164,6 +187,7 @@ public class TelaCadastroHospede {
                 long dias = ChronoUnit.DAYS.between(in, out);
                 if (dias <= 0) dias = 1;
 
+                // Executa polimorfismo aqui!
                 double valor = quartoParaSimulacao.calcularValor((int) dias);
                 lblValorTotal.setText(String.format("Valor Previsto: R$ %.2f", valor));
             }
@@ -175,6 +199,7 @@ public class TelaCadastroHospede {
         JButton salvar = new JButton("Salvar Hóspede e Reserva");
         JButton limpar = new JButton("Limpar");
 
+        // Consolida o cadastro no Backend
         salvar.addActionListener(e -> {
             try {
                 String tipoSelecionado = (String) comboTiposQuarto.getSelectedItem();
@@ -199,6 +224,7 @@ public class TelaCadastroHospede {
                     }
                 }
 
+                // Elege um quarto físico vago para o hospede
                 Quarto quartoParaReserva = null;
                 for (Quarto q : hotel.getQuartos()) {
                     if (!q.isOcupado()) {
@@ -211,7 +237,6 @@ public class TelaCadastroHospede {
                 if (quartoParaReserva == null) return;
 
                 if (quartoParaReserva instanceof ChaleFamilia) {
-                    // AQUI TAMBÉM USAMOS O NOVO MÉTODO PARA SALVAR
                     ((ChaleFamilia) quartoParaReserva).setCamas(solteiro, casal);
                 }
 
@@ -222,7 +247,20 @@ public class TelaCadastroHospede {
                 LocalDate dataCheckOut = MaisDeumdia.isSelected() ? ((Date) spinnerDataFim.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : dataCheckIn;
                 String horario = checkinEout.isSelected() ? "10h-8h" : (checkinEout2.isSelected() ? "14h-10h" : (checkinEout3.isSelected() ? "16h-14h" : "18h-16h"));
 
-                hotel.realizarReserva(h, responsavel, quartoParaReserva, dataCheckIn, dataCheckOut, horario);
+                // Integra e cria a reserva associando hóspede, recepcionista e quarto
+                // 1. Guarda a reserva que o hotel acabou de criar na memória
+                Reserva reservaCriada = hotel.realizarReserva(h, responsavel, quartoParaReserva, dataCheckIn, dataCheckOut, horario);
+
+                // 2. Verifica quais checkboxes estão marcados e faz a Composição acontecer lá no back-end!
+                if (chkAgua.isSelected()) {
+                    reservaCriada.addServicos("Água Mineral", 5.00);
+                }
+                if (chkLavanderia.isSelected()) {
+                    reservaCriada.addServicos("Lavanderia", 35.00);
+                }
+                if (chkFrigobar.isSelected()) {
+                    reservaCriada.addServicos("Frigobar Completo", 80.00);
+}
                 atualizarQuartos.run();
 
                 JOptionPane.showMessageDialog(painelCadastro, "Hóspede salvo e Reserva efetuada com sucesso!");

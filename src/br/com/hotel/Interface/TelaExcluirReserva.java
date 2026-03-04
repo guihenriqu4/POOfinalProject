@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
+// Interface para cancelamento de reservas e liberação imediata de quartos
 public class TelaExcluirReserva {
 
     public static JPanel criarPainel(Hotel hotel) {
@@ -29,12 +30,12 @@ public class TelaExcluirReserva {
         painel.add(painelCentro, BorderLayout.CENTER);
 
         JButton btnExcluir = new JButton("Cancelar Reserva Selecionada");
-        btnExcluir.setBackground(new Color(83, 0, 0)); // Cor vermelha para dar destaque
+        btnExcluir.setBackground(new Color(83, 0, 0)); 
         btnExcluir.setForeground(Color.RED);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        // Função para preencher a caixinha com as reservas atuais
+        // Constrói visualmente a caixinha com detalhes da reserva
         Runnable atualizarCaixa = () -> {
             comboReservas.removeAllItems();
             for (Reserva r : hotel.getReservasAtivas()) {
@@ -45,12 +46,10 @@ public class TelaExcluirReserva {
             }
         };
 
-        // Preenche a primeira vez que a tela abre
         atualizarCaixa.run();
-
-        // Se o usuário clicar em atualizar, roda a função de novo
         btnAtualizar.addActionListener(e -> atualizarCaixa.run());
 
+        // Processo de desconstrução da reserva
         btnExcluir.addActionListener(e -> {
             String selecionado = (String) comboReservas.getSelectedItem();
             if (selecionado == null) {
@@ -63,7 +62,6 @@ public class TelaExcluirReserva {
                     "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
             if (confirmacao == JOptionPane.YES_OPTION) {
-                // Procura a reserva que bate com o texto selecionado
                 Reserva reservaParaRemover = null;
                 for (Reserva r : hotel.getReservasAtivas()) {
                     String textoReserva = "Hóspede: " + r.getHospede().getNome() +
@@ -76,13 +74,13 @@ public class TelaExcluirReserva {
                 }
 
                 if (reservaParaRemover != null) {
-                    // Libera o quarto para poder ser alugado novamente
+                    // Libera fisicamente o status do quarto
                     reservaParaRemover.getQuarto().liberarQuarto();
-                    // Remove da lista do hotel
+                    // Exclui a instância da lista lógica do backend
                     hotel.getReservasAtivas().remove(reservaParaRemover);
 
                     JOptionPane.showMessageDialog(painel, "Reserva cancelada com sucesso!");
-                    atualizarCaixa.run(); // Atualiza a caixinha para a reserva sumir da tela
+                    atualizarCaixa.run(); 
                 }
             }
         });
