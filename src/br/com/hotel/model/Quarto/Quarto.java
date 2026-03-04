@@ -1,7 +1,8 @@
 package src.br.com.hotel.model.Quarto;
 import java.io.Serial;
+import java.io.Serializable;
 
-public abstract class Quarto {
+public abstract class Quarto implements Serializable {
     private Serial num;
     private boolean ocupado;
     private double valorBase;
@@ -55,10 +56,10 @@ public abstract class Quarto {
         this.descricao = descricao;
     }
 
-    public void exibir(){
-        System.out.printf("Número: %d\n", this.num);
-        System.out.printf("Disponibilidade: %s\n", this.ocupado ? "Ocupado" : "Livre");
-        System.out.printf("Valor Base: %.2f\n", this.valorBase);
-        System.out.printf("Descrição: %s\n", this.descricao);
+    public void exibir(){};
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " (R$ " + this.getValorBase() + " /dia)";
     }
 }

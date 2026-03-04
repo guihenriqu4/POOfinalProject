@@ -1,8 +1,9 @@
 package src.br.com.hotel.model;
+import java.io.Serializable;
 
 import java.time.LocalDate;
 
-public class ServicosQuarto {
+public class ServicosQuarto implements Serializable {
     private String descricao;
     private double valor;
     private LocalDate dataSolicitacao;

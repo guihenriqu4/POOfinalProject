@@ -1,5 +1,7 @@
 package src.br.com.hotel.model.Pessoa;
-public abstract class Pessoa{
+import java.io.Serializable;
+
+public abstract class Pessoa implements Serializable{
     private String nome;
     private String cpf;
     private String email;
@@ -32,9 +34,7 @@ public abstract class Pessoa{
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email;}
 
     public String getCelular() {
         return celular;

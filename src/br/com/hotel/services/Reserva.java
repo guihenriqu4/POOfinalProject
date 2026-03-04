@@ -1,4 +1,5 @@
 package src.br.com.hotel.services;
+import java.io.Serializable;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -12,7 +13,7 @@ import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.Quarto;
 
-public class Reserva {
+public class Reserva implements Serializable {
     private Hospede hospede;
     private Funcionario responsavel;
     private Quarto quarto;

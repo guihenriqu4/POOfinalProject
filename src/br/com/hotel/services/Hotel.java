@@ -1,5 +1,6 @@
 package src.br.com.hotel.services;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.Quarto;
 import src.br.com.hotel.services.Reserva;
 
-public class Hotel {
+public class Hotel implements Serializable{
     private String nome;
     private List<Hospede> hospedes;
     private Administrador adm;
@@ -30,6 +31,8 @@ public class Hotel {
         this.quartos = new ArrayList<>();
         this.reservasAtivas = new ArrayList<>();
     }
+
+    private static final String ARQUIVO_DADOS = "dados_do_hotel.dat";
 
     public void addHospede(Hospede h){
         this.hospedes.add(h);
@@ -85,9 +88,33 @@ public class Hotel {
         }
     }
 
-    public void salvarDados(){}
+    public void salvarDados(){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO_DADOS))) {
+            oos.writeObject(this.hospedes);
+            oos.writeObject(this.funcionarios);
+            oos.writeObject(this.quartos);
+            oos.writeObject(this.reservasAtivas);
+            System.out.println("Dados salvos com sucesso no HD!");
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar os dados: " + e.getMessage());
+        }
+    }
 
-    public void carregarDados(){}
+    public void carregarDados(){
+        File arquivo = new File(ARQUIVO_DADOS);
+        if (!arquivo.exists()) {
+            return; // Se é a primeira vez rodando, o arquivo não existe, então ignora
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO_DADOS))) {
+            this.hospedes = (List<Hospede>) ois.readObject();
+            this.funcionarios = (List<Funcionario>) ois.readObject();
+            this.quartos = (List<Quarto>) ois.readObject();
+            this.reservasAtivas = (List<Reserva>) ois.readObject();
+            System.out.println("Dados carregados com sucesso do HD!");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Erro ao carregar os dados: " + e.getMessage());
+        }
+    }
 
     public String getNome() {
         return nome;
