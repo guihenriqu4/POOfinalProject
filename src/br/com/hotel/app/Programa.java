@@ -5,14 +5,12 @@ import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.Interface.TelaAdministrador;
 import src.br.com.hotel.Interface.TelaCadastroFuncionario;
-import src.br.com.hotel.Interface.TelaCadastroHospede;
 import src.br.com.hotel.Interface.TelaExcluirFuncionario;
 import src.br.com.hotel.Interface.TelaExcluirReserva;
 import src.br.com.hotel.Interface.TelaMinhasReservas;
 import src.br.com.hotel.Interface.TelaRelatorioHotel;
 import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.model.Quarto.QuartoPadrao;
-import src.br.com.hotel.model.Quarto.Quarto;
 import src.br.com.hotel.model.Quarto.ChaleFamilia;
 import src.br.com.hotel.model.Quarto.SuiteLuxo;
 import src.br.com.hotel.services.Hotel;
@@ -241,7 +239,7 @@ public class Programa {
 
         // Controle de Acesso: O que Funcionários E Administradores podem ver
         if (usuarioLogado instanceof Funcionario) { 
-            abas.addTab("Cadastro de Hóspede", TelaCadastroHospede.criarPainel(hotelSimulado, (Funcionario) usuarioLogado));
+            abas.addTab("Cadastro de Hóspede", src.br.com.hotel.Interface.TelaCadastroReserva.criarPainel(hotelSimulado, (Funcionario) usuarioLogado));
             abas.addTab("Excluir Reserva", TelaExcluirReserva.criarPainel(hotelSimulado));
             abas.addTab("Relatório do Hotel", TelaRelatorioHotel.criarPainel(hotelSimulado));
         }

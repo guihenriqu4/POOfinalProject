@@ -69,8 +69,10 @@ public class TelaCadastroFuncionario {
                 // Adiciona na lista principal do sistema
                 hotel.addFuncionario(novo);
                 JOptionPane.showMessageDialog(painelCadastro, "Funcionário salvo!");
+            } catch (CamposInvalidosException ex){
+                JOptionPane.showMessageDialog(painelCadastro,ex.getMessage(), "Campos em Branco", JOptionPane.WARNING_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(painelCadastro, "Erro: Verifique os Dados, todos os campos devem estar preenchidos!","Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(painelCadastro, "Erro: Verifique se o salário é um número válido!","Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 

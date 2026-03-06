@@ -48,35 +48,6 @@ public class Hotel implements Serializable{
         return novaReserva;
     }
 
-    public void realizarCheckIn(Hospede h){
-        try{
-            Reserva ativar = null;
-            for(Reserva r : reservasAtivas){
-                if(h == r.getHospede()){
-                    ativar = r;
-                }
-            }
-            if(ativar == null){
-                throw new ReservaInexistenteException("O hospéde informado não possui reserva ativa.");
-            }
-        } catch(ReservaInexistenteException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void realizarCheckOut(Reserva r){
-        try{
-            System.out.println(r.calcularTotal());
-            r.setStatusPagamento(true);
-
-            r.finalizar(); // Libera o quarto
-            this.reservasAtivas.remove(r); // Tira a reserva da memória
-
-        } catch (FinalizacaoException | CalculoTotalException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
     // PERSISTÊNCIA: Transforma as listas em fluxo de bytes e salva no arquivo local
     public void salvarDados(){
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO_DADOS))) {
@@ -117,4 +88,4 @@ public class Hotel implements Serializable{
     public List<Funcionario> getFuncionarios() { return funcionarios; }
     public List<Quarto> getQuartos() { return quartos; }
     public List<Reserva> getReservasAtivas() { return reservasAtivas; }
-}
+    }

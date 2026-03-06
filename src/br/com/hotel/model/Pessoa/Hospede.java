@@ -16,9 +16,4 @@ public class Hospede extends Pessoa {
     public String getSenhaHospede() { return senhaHospede; }
     public void setSenhaHospede(String senhaHospede) { this.senhaHospede = senhaHospede; }
 
-    // Sobrescreve o método exibir para adicionar a senha antes dos dados comuns
-    public void exibir(){
-        System.out.printf("Número: %s\n", this.senhaHospede);
-        super.exibir(); // Chama o exibir() da classe Pessoa
-    }
 }

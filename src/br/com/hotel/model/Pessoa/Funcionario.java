@@ -6,7 +6,6 @@ public class Funcionario extends Pessoa {
     private double salario;
     private String setor;
     private String senha;
-    private final int nivelAcesso;
 
     // Construtor do Funcionário
     public Funcionario(String n, String cpf, String e, String c, double s, String setor, String senha){
@@ -14,7 +13,6 @@ public class Funcionario extends Pessoa {
         this.salario = s;
         this.setor = setor;
         this.senha = senha;
-        this.nivelAcesso = 0; // Funcionário comum inicia com nível 0
     }
 
     // Valida se a senha informada confere com a salva
@@ -29,12 +27,7 @@ public class Funcionario extends Pessoa {
     public void setSetor(String setor) { this.setor = setor; }
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
-    public int getNivelAcesso() { return nivelAcesso; }
 
     // Adiciona salário e setor na exibição
-    public void exibir(){
-        super.exibir();
-        System.out.println("Salário: " + this.salario);
-        System.out.println("Setor: " + this.setor);
-    }
+    public void exibir(){}
 }

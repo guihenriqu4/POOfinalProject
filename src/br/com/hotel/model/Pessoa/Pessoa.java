@@ -28,10 +28,5 @@ public abstract class Pessoa implements Serializable{
     public void setCelular(String celular) { this.celular = celular; }
  
     // Imprime os dados no terminal (útil para debug)
-    public void exibir(){
-        System.out.printf("Nome: %s\n", this.nome);
-        System.out.printf("CPF: %s\n", this.cpf);
-        System.out.printf("E-mail: %s\n", this.email);
-        System.out.printf("Celular: %s\n", this.celular);
-    }
+    public void exibir(){};
 }

@@ -1,7 +1,6 @@
 package src.br.com.hotel.Interface;
 
 
-import src.br.com.hotel.exceptions.CalculoTotalException;
 import src.br.com.hotel.exceptions.CamposInvalidosException;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
@@ -21,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 // Interface principal onde a recepção cadastra novos clientes e cria reservas simultaneamente
-public class TelaCadastroHospede {
+public class TelaCadastroReserva {
 
     public static JPanel criarPainel(Hotel hotel, Funcionario responsavel) {
         JPanel painelCadastro = new JPanel(new BorderLayout(10, 10));
