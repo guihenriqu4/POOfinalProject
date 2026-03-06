@@ -17,7 +17,7 @@ public abstract class Pessoa implements Serializable{
         this.celular = c;
     }
     
-    // Getters e Setters para permitir leitura e alteração segura dos dados
+    // Getters para permitir leitura e alteração segura dos dados
     public String getNome() { return nome; }
     public String getCpf() { return cpf; }
     public String getEmail() { return email; }

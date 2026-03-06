@@ -26,7 +26,7 @@ public class TelaMinhasReservas {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         StringBuilder relatorio = new StringBuilder();
 
-        // Filtra a lista do hotel para mostrar APENAS as que batem com o usuário logado
+        // Filtra a lista do hotel para mostrar apenas as que batem com o usuário logado
         boolean temReserva = false;
         for (Reserva r : hotel.getReservasAtivas()) {
             if (r.getHospede().equals(hospedeLogado)) {

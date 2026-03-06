@@ -20,7 +20,7 @@ public class Funcionario extends Pessoa {
         return this.senha.equals(senhaDigitada);
     }
 
-    // Getters e Setters
+    // Getters
     public double getSalario() { return salario; }
     public String getSetor() { return setor; }
     public String getSenha() { return senha; }

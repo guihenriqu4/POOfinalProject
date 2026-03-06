@@ -225,7 +225,7 @@ public class TelaCadastroReserva {
                 String celularTexto = camposPessoa[3].getText().trim();
                 String senha = txtsenhaHospede.getText().trim();
 
-                //Validação de campos vazios usando sua Exception personalizada
+                //Validação de campos vazios usando Exception
                 if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celularTexto.isEmpty() || senha.isEmpty()) {
                     throw new src.br.com.hotel.exceptions.CamposInvalidosException("Por favor, preencha todos os campos do Hóspede!");
                 }
@@ -282,7 +282,7 @@ public class TelaCadastroReserva {
                     ((ChaleFamilia) quartoParaReserva).setCamas(solteiro, casal);
                 }
 
-                // Criando o Hóspede com o celular já convertido para long
+                // Cria o Hóspede
                 Hospede h = new Hospede(nome, cpf, email, celularLong, senha);
                 hotel.addHospede(h);
 

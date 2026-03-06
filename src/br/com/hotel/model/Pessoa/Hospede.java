@@ -12,6 +12,6 @@ public class Hospede extends Pessoa {
         this.senhaHospede = num;
     }
 
-    // Getters e Setters
+    // Getters
     public String getSenhaHospede() { return senhaHospede; }
 }

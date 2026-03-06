@@ -72,13 +72,13 @@ public class TelaCadastroFuncionario {
                 String setor = txtSetor.getText().trim();
                 String senha = new String(txtSenha.getPassword()).trim();
 
-                // 1. Validação de campos vazios
+                // Validação de campos vazios
                 if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celularTexto.isEmpty() ||
                         salarioTexto.isEmpty() || setor.isEmpty() || senha.isEmpty()) {
                     throw new CamposInvalidosException("Por favor, preencha todos os campos antes de salvar!");
                 }
 
-                // 2. Validação de formato (Transformando NumberFormatException na sua classe)
+                // Validação de formato (Transformando NumberFormatException na sua classe)
                 long celularLong;
                 double valorSalario;
                 try {
@@ -88,7 +88,7 @@ public class TelaCadastroFuncionario {
                     throw new FormatoInvalidoException("Salário e Celular devem conter apenas números!");
                 }
 
-                // 3. Validação de regra de negócio (Salário)
+                // Validação de regra de negócio (Salário)
                 if (valorSalario <= 0) {
                     throw new SalarioNegativoException("O salário não pode ser um valor negativo ou nulo!");
                 }

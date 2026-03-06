@@ -25,7 +25,7 @@ public abstract class Quarto implements Serializable {
     public void liberarQuarto() { this.ocupado = false; }
     public void ocuparQuarto() { this.ocupado = true; }
 
-    // Getters e Setters
+    // Getters
     public boolean isOcupado() { return ocupado; }
     public double getValorBase() { return valorBase; }
     public String getDescricao() { return descricao; }

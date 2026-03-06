@@ -44,7 +44,7 @@ public class Reserva implements Serializable {
         return total;
     }
 
-        // Getters e Setters
+        // Getters
         public Hospede getHospede() { return hospede; }
         public Funcionario getResponsavel() { return responsavel; }
         public Quarto getQuarto() { return quarto; }

@@ -90,7 +90,7 @@ public class Hotel implements Serializable{
         }
     }
 
-    // Getters e Setters
+    // Getters
     public List<Hospede> getHospedes() { return hospedes; }
     public List<Funcionario> getFuncionarios() { return funcionarios; }
     public List<Quarto> getQuartos() { return quartos; }
