@@ -122,6 +122,7 @@ public class TelaRelatorioHotel {
                     sb.append("\n   Email: ").append(reservaEncontrada.getHospede().getEmail())
                             .append(" | CPF: ").append(reservaEncontrada.getHospede().getCpf())
                             .append(" | Celular: ").append(reservaEncontrada.getHospede().getCelular())
+                            .append("\n   Atendente Responsável: ").append(reservaEncontrada.getResponsavel().getNome())
                             .append("\n\n");
                 } else {
                     disponiveis++;

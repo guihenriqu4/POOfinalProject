@@ -50,32 +50,77 @@ public class Programa {
 
     // Método que cria objetos falsos para o professor conseguir testar o sistema logo de cara
     private static void inicializarDadosTeste() {
-        Administrador admin = new Administrador("Admin Silva", "12345678900", "admin@hotel.com", "999999999", 5000.0, "Gerência", "senha123");
-        hotelSimulado = new Hotel("Hotel POO", admin);
+        Administrador admin = new Administrador("Admin Roberto", "12345678900", "adminRoberto@hotel.com", "21999999999", 7500.0, "Gerência", "senha123");
+        hotelSimulado = new Hotel("Hotel Paraíso, Oásis & Oceano", admin);
 
         hotelSimulado.carregarDados();
         // Se a lista de funcionários vier vazia, significa que o arquivo não existia
         if (hotelSimulado.getFuncionarios().isEmpty()) {
+
+            // --- CADASTRANDO FUNCIONÁRIOS E ADMINS ---
             hotelSimulado.addFuncionario(admin);
 
-            Funcionario comum = new Funcionario("Funcionario Joao", "11122233344", "joao@hotel.com", "888888888", 2000.0, "Recepção", "senha123");
-            hotelSimulado.addFuncionario(comum);
+            // +1 Administrador
+            Administrador admin2 = new Administrador("Julia Costa", "22233344455", "juliacosta@hotel.com", "21999888777", 6000.0, "Gerência", "senha123");
+            hotelSimulado.addFuncionario(admin2);
 
-            // Adiciona hóspede de teste para popular a tabela de relatórios
+            // 3 Funcionários Comuns
+            Funcionario funcionarioTeste = new Funcionario("Funcionario Joao", "11122233344", "joao@hotel.com", "16888888888", 2000.0, "Recepção", "senha123");
+            hotelSimulado.addFuncionario(funcionarioTeste);
+            Funcionario comum2 = new Funcionario("Pedro Queixo", "33344455559", "pedroqueixo@hotel.com", "21999111222", 2900.0, "Recepção", "FuncPedroQ");
+            hotelSimulado.addFuncionario(comum2);
+            Funcionario comum3 = new Funcionario("Marta Silva", "44455566610", "marta10@hotel.com", "11999333444", 2200.0, "Recepção", "FuncMarta10");
+            hotelSimulado.addFuncionario(comum3);
+
+            // --- CADASTRANDO HÓSPEDES ---
             Hospede hospedeTeste = new Hospede("Hospede Maria", "00011122233", "maria@gmail.com", "777777777", "Hospede123");
-            hotelSimulado.addHospede(hospedeTeste);
+            Hospede h2 = new Hospede("Carlos Miguel", "55566677788", "carlos@gmail.com", "999555666", "Hospede200");
+            Hospede h3 = new Hospede("Lucia Pereira", "66677788899", "lucia@gmail.com", "999777888", "Hospede203");
+            Hospede h4 = new Hospede("São Marcos", "77788899900", "marcos@gmail.com", "999999000", "Hospede99");
+            Hospede h5 = new Hospede("Phillipe Coutinho", "88899900011", "philcoutinho@gmail.com", "999000111", "Hospede11");
+            Hospede h6 = new Hospede("Bruno Henrique", "99900011122", "bh27@gmail.com", "999222333", "Hospede00");
 
-            // Popula o hotel com vários quartos para teste
+            hotelSimulado.addHospede(hospedeTeste);
+            hotelSimulado.addHospede(h2);
+            hotelSimulado.addHospede(h3);
+            hotelSimulado.addHospede(h4);
+            hotelSimulado.addHospede(h5);
+            hotelSimulado.addHospede(h6);
+
+            // --- POPULANDO O HOTEL COM QUARTOS ---
             for (int i = 0; i < 7; i++) {
-                hotelSimulado.addQuarto(new QuartoPadrao(150.0));
-                hotelSimulado.addQuarto(new SuiteLuxo(400.0));
+                hotelSimulado.addQuarto(new QuartoPadrao(150.0)); // Cria do índice 0 ao 6
             }
-            for(int i = 0;i < 4; i++){
-                hotelSimulado.addQuarto(new ChaleFamilia(300.00, 4));
+            for (int i = 0; i < 7; i++) {
+                hotelSimulado.addQuarto(new SuiteLuxo(400.0));    // Cria do índice 7 ao 13
             }
-            // Pega o primeiro quarto da lista para fazer a reserva teste da Maria
-            Quarto quartoMaria = hotelSimulado.getQuartos().get(0);
-            hotelSimulado.realizarReserva(hospedeTeste, comum, quartoMaria, LocalDate.now(), LocalDate.now().plusDays(3), "14h-10h");
+            for(int i = 0; i < 4; i++){
+                hotelSimulado.addQuarto(new ChaleFamilia(300.00, 4)); // Cria do índice 14 ao 17
+            }
+
+            // --- REALIZANDO AS 6 RESERVAS (1 original + 5 novas) ---
+
+            // Reserva 1: Maria (Quarto Padrão) feito  pelo Joao
+            hotelSimulado.realizarReserva(hospedeTeste, funcionarioTeste, hotelSimulado.getQuartos().get(0), LocalDate.now() , LocalDate.now().plusDays(3), "14h-10h");
+
+            // Reserva 2: Carlos (Quarto Padrão) feito pelo Pedro
+            hotelSimulado.realizarReserva(h2, comum2, hotelSimulado.getQuartos().get(1), LocalDate.now().plusDays(1), LocalDate.now().plusDays(5), "10h-8h");
+
+            // Reserva 3: Lucia (Chale Familia) feito pela Marta
+            ChaleFamilia chaleLucia = (ChaleFamilia) hotelSimulado.getQuartos().get(14);
+            chaleLucia.setCamas(2, 1); // 2 camas de solteiro e 1 de casal
+            hotelSimulado.realizarReserva(h3, comum3, chaleLucia, LocalDate.now().minusDays(2), LocalDate.now().plusDays(2), "16h-14h");
+
+            // Reserva 4: Marcos (Suíte Luxo) feito pelo Pedro
+            hotelSimulado.realizarReserva(h4, comum2, hotelSimulado.getQuartos().get(7), LocalDate.now(), LocalDate.now().plusDays(4), "14h-10h");
+
+            // Reserva 5: Phillipe Coutinho (Suíte Luxo) feito pela Julia Costa
+            hotelSimulado.realizarReserva(h5, admin2, hotelSimulado.getQuartos().get(8), LocalDate.now().plusDays(2), LocalDate.now().plusDays(7), "18h-16h");
+
+            // Reserva 6: Bruno Henrique (Chale Familia) feito pelo Joao
+            ChaleFamilia chaleBruno = (ChaleFamilia) hotelSimulado.getQuartos().get(15);
+            chaleBruno.setCamas(0, 2); // 0 camas de solteiro e 2 de casal
+            hotelSimulado.realizarReserva(h6, funcionarioTeste, chaleBruno, LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "10h-8h");
         }
         hotelSimulado.salvarDados(); // Salva esse estado inicial no arquivo
     }
@@ -163,21 +208,27 @@ public class Programa {
     private static void abrirTelaPrincipal(Pessoa usuarioLogado) {
         JFrame frame = new JFrame("Sistema Hoteleiro - " + usuarioLogado.getNome());
 
-        // Criação do Menu Superior (Arquivo -> Novo / Sair)
+        // Criação do Menu Superior (Sobre Nós -> Tela com informações do Hotel)
         JMenuBar menuBar = new JMenuBar();
-        JMenu menuArquivo = new JMenu("Arquivo");
-        JMenuItem itemNovo = new JMenuItem("Novo");
-        JMenuItem itemSair = new JMenuItem("Sair");
-        itemSair.addActionListener(e -> System.exit(0));
 
-        JMenu menuAjuda = new JMenu("Ajuda");
-        JMenuItem itemAjuda = new JMenuItem("Sobre nós");
+        JMenu menuSobreNos = new JMenu("Sobre Nós");
 
-        menuArquivo.add(itemNovo);
-        menuArquivo.add(itemSair);
-        menuBar.add(menuArquivo);
-        menuBar.add(menuAjuda);
-        menuAjuda.add(itemAjuda);
+        menuSobreNos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                String descricaoHotel = "Bem-vindo ao Hotel Paraíso,Oásis & Oceano !\n\n" +
+                        "Localizado no litoral do Rio de Janeiro, nosso hotel oferece uma experiência " +
+                        "única de conforto e tecnologia. Contamos com quartos confortáveis, " +
+                        "atendimento especializado e um sistema de gestão de ponta desenvolvido " +
+                        "para garantir a melhor estadia possível aos nossos hóspedes.\n\n" +
+                        "Versão do Sistema: 1.0\n" +
+                        "Desenvolvido por: Guilherme Henrique e Felipe Piva";
+
+                JOptionPane.showMessageDialog(frame, descricaoHotel, "Sobre o Hotel POO", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        menuBar.add(menuSobreNos);
         frame.setJMenuBar(menuBar);
 
         // Painel de Abas principal

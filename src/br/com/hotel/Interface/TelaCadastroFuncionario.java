@@ -3,6 +3,7 @@ package src.br.com.hotel.Interface;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.services.Hotel;
+import src.br.com.hotel.exceptions.CamposInvalidosException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +45,20 @@ public class TelaCadastroFuncionario {
         // Ação de salvamento
         btnSalvar.addActionListener(e -> {
             try {
+                String nome = camposPessoa[0].getText().trim();
+                String cpf = camposPessoa[1].getText().trim();
+                String email = camposPessoa[2].getText().trim();
+                String celular = camposPessoa[3].getText().trim();
+                String salario = txtSalario.getText().trim();
+                String setor = txtSetor.getText().trim();
+                String senha = new String(txtSenha.getPassword()).trim();
+
+                //Lança a excessão se tiver alguma caixa vazia ao salvar
+                if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celular.isEmpty() ||
+                        salario.isEmpty() || setor.isEmpty() || senha.isEmpty()) {
+                    throw new CamposInvalidosException("Por favor, preencha todos os campos antes de salvar!");
+                }
+
                 Funcionario novo;
                 // Instancia Administrador ou Funcionario comum com base no Radio Button (Polimorfismo/Herança)
                 if (rbAdmin.isSelected()) {
@@ -55,7 +70,7 @@ public class TelaCadastroFuncionario {
                 hotel.addFuncionario(novo);
                 JOptionPane.showMessageDialog(painelCadastro, "Funcionário salvo!");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(painelCadastro, "Erro: Verifique os dados.");
+                JOptionPane.showMessageDialog(painelCadastro, "Erro: Verifique os Dados, todos os campos devem estar preenchidos!","Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 

@@ -1,6 +1,8 @@
 package src.br.com.hotel.Interface;
 
+
 import src.br.com.hotel.exceptions.CalculoTotalException;
+import src.br.com.hotel.exceptions.CamposInvalidosException;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.ChaleFamilia;
@@ -9,6 +11,7 @@ import src.br.com.hotel.model.Quarto.QuartoPadrao;
 import src.br.com.hotel.model.Quarto.SuiteLuxo;
 import src.br.com.hotel.services.Hotel;
 import src.br.com.hotel.services.Reserva;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -113,21 +116,6 @@ public class TelaCadastroHospede {
         JLabel label2 = new JLabel("Mais de um dia de hospedagem?");
         JCheckBox MaisDeumdia = new JCheckBox("Sim");
 
-        // --- CARDÁPIO DE SERVIÇOS ---
-        JLabel lblServicos = new JLabel("Serviços de Quarto Adicionais:");
-        
-        JCheckBox chkAgua = new JCheckBox("Água Mineral (R$ 5,00)");
-        JCheckBox chkLavanderia = new JCheckBox("Lavanderia (R$ 35,00)");
-        JCheckBox chkFrigobar = new JCheckBox("Frigobar Completo (R$ 80,00)");
-
-        JPanel painelServicos = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        painelServicos.add(chkAgua);
-        painelServicos.add(chkLavanderia);
-        painelServicos.add(chkFrigobar);
-
-        painelFormulario.add(lblServicos);
-        painelFormulario.add(painelServicos);
-
         JPanel painelDatas = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         painelDatas.setVisible(false);
 
@@ -202,6 +190,15 @@ public class TelaCadastroHospede {
         // Consolida o cadastro no Backend
         salvar.addActionListener(e -> {
             try {
+                String nome = camposPessoa[0].getText().trim();
+                String cpf = camposPessoa[1].getText().trim();
+                String email = camposPessoa[2].getText().trim();
+                String celular = camposPessoa[3].getText().trim();
+                String senha = txtsenhaHospede.getText().trim();
+
+                if(nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celular.isEmpty() || senha.isEmpty()){
+                    throw new CamposInvalidosException("Por favor, preencha todos os campos do Hóspede!");
+                }
                 String tipoSelecionado = (String) comboTiposQuarto.getSelectedItem();
                 if (tipoSelecionado == null) {
                     JOptionPane.showMessageDialog(painelCadastro, "Não há quartos disponíveis!", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -252,15 +249,6 @@ public class TelaCadastroHospede {
                 Reserva reservaCriada = hotel.realizarReserva(h, responsavel, quartoParaReserva, dataCheckIn, dataCheckOut, horario);
 
                 // 2. Verifica quais checkboxes estão marcados e faz a Composição acontecer lá no back-end!
-                if (chkAgua.isSelected()) {
-                    reservaCriada.addServicos("Água Mineral", 5.00);
-                }
-                if (chkLavanderia.isSelected()) {
-                    reservaCriada.addServicos("Lavanderia", 35.00);
-                }
-                if (chkFrigobar.isSelected()) {
-                    reservaCriada.addServicos("Frigobar Completo", 80.00);
-}
                 atualizarQuartos.run();
 
                 JOptionPane.showMessageDialog(painelCadastro, "Hóspede salvo e Reserva efetuada com sucesso!");
