@@ -5,13 +5,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.br.com.hotel.exceptions.CalculoTotalException;
-import src.br.com.hotel.exceptions.FinalizacaoException;
-import src.br.com.hotel.exceptions.ReservaInexistenteException;
 import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
+import src.br.com.hotel.model.Quarto.ChaleFamilia;
 import src.br.com.hotel.model.Quarto.Quarto;
+import src.br.com.hotel.model.Quarto.QuartoPadrao;
+import src.br.com.hotel.model.Quarto.SuiteLuxo;
 
 // Gerenciador central do Banco de Dados em Memória
 public class Hotel implements Serializable{
@@ -39,7 +39,18 @@ public class Hotel implements Serializable{
     // Adiciona instâncias nas listas
     public void addHospede(Hospede h){ this.hospedes.add(h); }
     public void addFuncionario(Funcionario f){ this.funcionarios.add(f); }
-    public void addQuarto(Quarto q){ this.quartos.add(q); }
+    public void addQuartoPadrao(double valor){
+        Quarto q = new QuartoPadrao(valor);
+        this.quartos.add(q);
+    }
+    public void addQuartoSuite(double valor){
+        Quarto q = new SuiteLuxo(valor);
+        this.quartos.add(q);
+    }
+    public void addQuartoChale(double valor, int qtd){
+        Quarto q = new ChaleFamilia(valor, qtd);
+        this.quartos.add(q);
+    }
 
     // Cria reserva e injeta na lista
     public Reserva realizarReserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out, String horario){

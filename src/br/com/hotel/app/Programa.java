@@ -10,9 +10,7 @@ import src.br.com.hotel.Interface.TelaExcluirReserva;
 import src.br.com.hotel.Interface.TelaMinhasReservas;
 import src.br.com.hotel.Interface.TelaRelatorioHotel;
 import src.br.com.hotel.model.Pessoa.Administrador;
-import src.br.com.hotel.model.Quarto.QuartoPadrao;
 import src.br.com.hotel.model.Quarto.ChaleFamilia;
-import src.br.com.hotel.model.Quarto.SuiteLuxo;
 import src.br.com.hotel.services.Hotel;
 
 import javax.swing.*;
@@ -87,13 +85,13 @@ public class Programa {
 
             // --- POPULANDO O HOTEL COM QUARTOS ---
             for (int i = 0; i < 7; i++) {
-                hotelSimulado.addQuarto(new QuartoPadrao(150.0)); // Cria do índice 0 ao 6
+                hotelSimulado.addQuartoPadrao(150.0); // Cria do índice 0 ao 6
             }
             for (int i = 0; i < 7; i++) {
-                hotelSimulado.addQuarto(new SuiteLuxo(400.0));    // Cria do índice 7 ao 13
+                hotelSimulado.addQuartoSuite(400.0); // Cria do índice 7 ao 13
             }
             for(int i = 0; i < 4; i++){
-                hotelSimulado.addQuarto(new ChaleFamilia(300.00, 4)); // Cria do índice 14 ao 17
+                hotelSimulado.addQuartoChale(300.0, 4); // Cria do índice 14 ao 17
             }
 
             // --- REALIZANDO AS 6 RESERVAS (1 original + 5 novas) ---

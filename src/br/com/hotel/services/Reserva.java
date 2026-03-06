@@ -2,8 +2,6 @@ package src.br.com.hotel.services;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 import src.br.com.hotel.exceptions.CalculoTotalException;
 import src.br.com.hotel.exceptions.FinalizacaoException;

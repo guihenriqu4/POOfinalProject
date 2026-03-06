@@ -9,7 +9,6 @@ import src.br.com.hotel.model.Quarto.Quarto;
 import src.br.com.hotel.model.Quarto.QuartoPadrao;
 import src.br.com.hotel.model.Quarto.SuiteLuxo;
 import src.br.com.hotel.services.Hotel;
-import src.br.com.hotel.services.Reserva;
 
 
 import javax.swing.*;
@@ -244,8 +243,7 @@ public class TelaCadastroReserva {
                 String horario = checkinEout.isSelected() ? "10h-8h" : (checkinEout2.isSelected() ? "14h-10h" : (checkinEout3.isSelected() ? "16h-14h" : "18h-16h"));
 
                 // Integra e cria a reserva associando hóspede, recepcionista e quarto
-                // 1. Guarda a reserva que o hotel acabou de criar na memória
-                Reserva reservaCriada = hotel.realizarReserva(h, responsavel, quartoParaReserva, dataCheckIn, dataCheckOut, horario);
+                hotel.realizarReserva(h, responsavel, quartoParaReserva, dataCheckIn, dataCheckOut, horario);
 
                 // 2. Verifica quais checkboxes estão marcados e faz a Composição acontecer lá no back-end!
                 atualizarQuartos.run();

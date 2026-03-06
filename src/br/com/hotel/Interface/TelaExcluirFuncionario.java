@@ -1,7 +1,6 @@
 package src.br.com.hotel.Interface;
 
 import src.br.com.hotel.model.Pessoa.Funcionario;
-import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.services.Hotel;
 
 import javax.swing.*;
