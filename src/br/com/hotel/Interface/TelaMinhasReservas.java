@@ -37,7 +37,7 @@ public class TelaMinhasReservas {
                 relatorio.append("Data de Check-out: ").append(r.getCheckOut().format(formatter)).append("\n");
                 relatorio.append("Horário (Entrada-Saída): ").append(r.getHorario()).append("\n");
                 relatorio.append("Responsável (Funcionário): ").append(r.getResponsavel().getNome()).append("\n");
-                relatorio.append("Status: ").append(r.isStatusPagamento() ? "Pago" : "Pagamento Pendente").append("\n");
+                relatorio.append("Valor Total da Hospedagem: ").append(r.getValorFormatado()).append("\n");
                 relatorio.append("=====================================\n\n");
             }
         }

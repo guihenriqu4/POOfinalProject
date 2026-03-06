@@ -8,7 +8,7 @@ public class Funcionario extends Pessoa {
     private String senha;
 
     // Construtor do Funcionário
-    public Funcionario(String n, String cpf, String e, String c, double s, String setor, String senha){
+    public Funcionario(String n, String cpf, String e, long c, double s, String setor, String senha){
         super(n, cpf, e, c); // Envia os dados básicos para a classe pai
         this.salario = s;
         this.setor = setor;
@@ -22,12 +22,6 @@ public class Funcionario extends Pessoa {
 
     // Getters e Setters
     public double getSalario() { return salario; }
-    public void setSalario(double salario) { this.salario = salario; }
     public String getSetor() { return setor; }
-    public void setSetor(String setor) { this.setor = setor; }
     public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
-
-    // Adiciona salário e setor na exibição
-    public void exibir(){}
 }

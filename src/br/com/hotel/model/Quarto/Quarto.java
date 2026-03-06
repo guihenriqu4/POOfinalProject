@@ -26,14 +26,9 @@ public abstract class Quarto implements Serializable {
     public void ocuparQuarto() { this.ocupado = true; }
 
     // Getters e Setters
-    public int getNum() { return num; }
     public boolean isOcupado() { return ocupado; }
     public double getValorBase() { return valorBase; }
-    public void setValorBase(double valorBase) { this.valorBase = valorBase; }
     public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
-
-    public void exibir(){};
 
     // Formata o nome do objeto para aparecer bonito na interface gráfica
     @Override

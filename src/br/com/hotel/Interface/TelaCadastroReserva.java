@@ -185,18 +185,58 @@ public class TelaCadastroReserva {
         JButton salvar = new JButton("Salvar Hóspede e Reserva");
         JButton limpar = new JButton("Limpar");
 
+        // Ação do botão limpar
+        limpar.addActionListener(e -> {
+            //Limpa os campos de texto (Nome, CPF, Email, Celular)
+            for (JTextField campo : camposPessoa) {
+                campo.setText("");
+            }
+            //Limpa a senha
+            txtsenhaHospede.setText("");
+
+            //Reseta as seleções de Quartos e Camas
+            if (comboTiposQuarto.getItemCount() > 0) comboTiposQuarto.setSelectedIndex(0);
+            comboSolteiro.setSelectedIndex(0);
+            comboCasal.setSelectedIndex(0);
+
+            //Reseta as Datas para o dia atual
+            spinnerDataInicio.setValue(new java.util.Date());
+            spinnerDataFim.setValue(new java.util.Date());
+
+            //Reseta Checkbox e RadioButtons
+            MaisDeumdia.setSelected(false);
+            checkinEout.setSelected(true); // Volta para o primeiro horário (10h-8h)
+
+            //Reseta o label de valor
+            lblValorTotal.setText("Valor Previsto: R$ 0,00");
+
+            //Esconde painéis condicionais
+            painelDatas.setVisible(false);
+            lblCamas.setVisible(false);
+            painelCamas.setVisible(false);
+        });
+
         // Consolida o cadastro no Backend
         salvar.addActionListener(e -> {
             try {
                 String nome = camposPessoa[0].getText().trim();
                 String cpf = camposPessoa[1].getText().trim();
                 String email = camposPessoa[2].getText().trim();
-                String celular = camposPessoa[3].getText().trim();
+                String celularTexto = camposPessoa[3].getText().trim();
                 String senha = txtsenhaHospede.getText().trim();
 
-                if(nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celular.isEmpty() || senha.isEmpty()){
-                    throw new CamposInvalidosException("Por favor, preencha todos os campos do Hóspede!");
+                //Validação de campos vazios usando sua Exception personalizada
+                if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celularTexto.isEmpty() || senha.isEmpty()) {
+                    throw new src.br.com.hotel.exceptions.CamposInvalidosException("Por favor, preencha todos os campos do Hóspede!");
                 }
+                //Validação de formato: Tenta transformar o celular em número (long)
+                long celularLong;
+                try {
+                    celularLong = Long.parseLong(celularTexto);
+                } catch (NumberFormatException ex) {
+                    throw new src.br.com.hotel.exceptions.FormatoInvalidoException("O celular do hóspede deve conter apenas números!");
+                }
+
                 String tipoSelecionado = (String) comboTiposQuarto.getSelectedItem();
                 if (tipoSelecionado == null) {
                     JOptionPane.showMessageDialog(painelCadastro, "Não há quartos disponíveis!", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -219,13 +259,20 @@ public class TelaCadastroReserva {
                     }
                 }
 
-                // Elege um quarto físico vago para o hospede
+                // Elege um quarto físico vago para o hóspede
                 Quarto quartoParaReserva = null;
                 for (Quarto q : hotel.getQuartos()) {
                     if (!q.isOcupado()) {
-                        if (tipoSelecionado.contains("Padrão") && q instanceof QuartoPadrao) { quartoParaReserva = q; break; }
-                        else if (tipoSelecionado.contains("Suíte") && q instanceof SuiteLuxo) { quartoParaReserva = q; break; }
-                        else if (tipoSelecionado.contains("Chalé") && q instanceof ChaleFamilia) { quartoParaReserva = q; break; }
+                        if (tipoSelecionado.contains("Padrão") && q instanceof QuartoPadrao) {
+                            quartoParaReserva = q;
+                            break;
+                        } else if (tipoSelecionado.contains("Suíte") && q instanceof SuiteLuxo) {
+                            quartoParaReserva = q;
+                            break;
+                        } else if (tipoSelecionado.contains("Chalé") && q instanceof ChaleFamilia) {
+                            quartoParaReserva = q;
+                            break;
+                        }
                     }
                 }
 
@@ -235,23 +282,28 @@ public class TelaCadastroReserva {
                     ((ChaleFamilia) quartoParaReserva).setCamas(solteiro, casal);
                 }
 
-                Hospede h = new Hospede(camposPessoa[0].getText(), camposPessoa[1].getText(), camposPessoa[2].getText(), camposPessoa[3].getText(), txtsenhaHospede.getText());
+                // Criando o Hóspede com o celular já convertido para long
+                Hospede h = new Hospede(nome, cpf, email, celularLong, senha);
                 hotel.addHospede(h);
 
-                LocalDate dataCheckIn = ((Date) spinnerDataInicio.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                LocalDate dataCheckOut = MaisDeumdia.isSelected() ? ((Date) spinnerDataFim.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : dataCheckIn;
+                LocalDate dataCheckIn = ((java.util.Date) spinnerDataInicio.getValue()).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+                LocalDate dataCheckOut = MaisDeumdia.isSelected() ? ((java.util.Date) spinnerDataFim.getValue()).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate() : dataCheckIn;
                 String horario = checkinEout.isSelected() ? "10h-8h" : (checkinEout2.isSelected() ? "14h-10h" : (checkinEout3.isSelected() ? "16h-14h" : "18h-16h"));
 
                 // Integra e cria a reserva associando hóspede, recepcionista e quarto
                 hotel.realizarReserva(h, responsavel, quartoParaReserva, dataCheckIn, dataCheckOut, horario);
 
-                // 2. Verifica quais checkboxes estão marcados e faz a Composição acontecer lá no back-end!
                 atualizarQuartos.run();
 
                 JOptionPane.showMessageDialog(painelCadastro, "Hóspede salvo e Reserva efetuada com sucesso!");
                 lblValorTotal.setText("Valor Previsto: R$ 0,00");
+
+            } catch (src.br.com.hotel.exceptions.CamposInvalidosException ex) {
+                JOptionPane.showMessageDialog(painelCadastro, ex.getMessage(), "Campos em Branco", JOptionPane.WARNING_MESSAGE);
+            } catch (src.br.com.hotel.exceptions.FormatoInvalidoException ex) {
+                JOptionPane.showMessageDialog(painelCadastro, ex.getMessage(), "Erro de Formato", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(painelCadastro, "Erro ao salvar: Verifique os dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(painelCadastro, "Erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 

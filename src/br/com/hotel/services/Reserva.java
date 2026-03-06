@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import src.br.com.hotel.exceptions.CalculoTotalException;
-import src.br.com.hotel.exceptions.FinalizacaoException;
 import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Hospede;
 import src.br.com.hotel.model.Quarto.Quarto;
@@ -20,7 +19,6 @@ public class Reserva implements Serializable {
     private LocalDate checkIn;
     private LocalDate checkOut;
     private String horario;
-    private boolean statusPagamento;
 
     public Reserva(Hospede h, Funcionario r, Quarto q, LocalDate in, LocalDate out, String horario){
         this.hospede = h;
@@ -29,8 +27,6 @@ public class Reserva implements Serializable {
         this.checkIn = in;
         this.checkOut = out;
         this.horario = horario;
-
-        this.statusPagamento = false;
 
         this.quarto.ocuparQuarto(); // Ocupa o quarto fisicamente ao reservar
     }
@@ -48,25 +44,19 @@ public class Reserva implements Serializable {
         return total;
     }
 
-    // Finaliza e libera o quarto
-        public void finalizar() throws FinalizacaoException {
-            this.quarto.liberarQuarto();
-            if(this.quarto.isOcupado()) throw new FinalizacaoException("Erro ao liberar quarto. Tente novamente!");
-        }
-
         // Getters e Setters
         public Hospede getHospede() { return hospede; }
-        public void setHospede(Hospede hospede) { this.hospede = hospede; }
         public Funcionario getResponsavel() { return responsavel; }
-        public void setResponsavel(Funcionario responsavel) { this.responsavel = responsavel; }
         public Quarto getQuarto() { return quarto; }
         public void setQuarto(Quarto quarto) { this.quarto = quarto; }
         public LocalDate getCheckIn() { return checkIn; }
-        public void setCheckIn(LocalDate checkIn) { this.checkIn = checkIn; }
         public LocalDate getCheckOut() { return checkOut; }
-        public void setCheckOut(LocalDate checkOut) { this.checkOut = checkOut; }
         public String getHorario() { return horario; }
-        public void setHorario(String horario) { this.horario = horario; }
-        public boolean isStatusPagamento() { return statusPagamento; }
-        public void setStatusPagamento(boolean statusPagamento) { this.statusPagamento = statusPagamento; }
+        public String getValorFormatado() {
+        try {
+            return String.format("R$ %.2f", calcularTotal());
+            }  catch (CalculoTotalException e) {
+            return "Erro no cálculo";
+            }
+        }
 }

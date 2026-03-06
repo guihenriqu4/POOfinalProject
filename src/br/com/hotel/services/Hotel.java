@@ -22,7 +22,7 @@ public class Hotel implements Serializable{
     private List<Hospede> hospedes; // AGREGAÇÃO
     private List<Funcionario> funcionarios; // AGREGAÇÃO
     private List<Quarto> quartos; // COMPOSIÇÃO
-    private List<Reserva> reservasAtivas;
+    private List<Reserva> reservasAtivas; // COMPOSIÇÃO
 
     // Nome do arquivo de persistência
     private static final String ARQUIVO_DADOS = "dados_do_hotel.dat";
@@ -91,11 +91,7 @@ public class Hotel implements Serializable{
     }
 
     // Getters e Setters
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
     public List<Hospede> getHospedes() { return hospedes; }
-    public Administrador getAdm() { return adm; }
-    public void setAdm(Administrador adm) { this.adm = adm; }
     public List<Funcionario> getFuncionarios() { return funcionarios; }
     public List<Quarto> getQuartos() { return quartos; }
     public List<Reserva> getReservasAtivas() { return reservasAtivas; }

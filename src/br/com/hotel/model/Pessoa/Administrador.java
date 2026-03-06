@@ -4,7 +4,7 @@ package src.br.com.hotel.model.Pessoa;
 public class Administrador extends Funcionario {
 
     // Construtor do Admin
-    public Administrador(String n, String cpf, String e, String c, double s, String setor, String senha){
+    public Administrador(String n, String cpf, String e, long c, double s, String setor, String senha){
         // Chama o construtor de Funcionario
         super(n, cpf, e, c, s, setor, senha);
     }

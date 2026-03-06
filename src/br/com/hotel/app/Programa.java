@@ -46,7 +46,7 @@ public class Programa {
 
     // Método que cria objetos falsos para o professor conseguir testar o sistema logo de cara
     private static void inicializarDadosTeste() {
-        Administrador admin = new Administrador("Admin Roberto", "12345678900", "adminRoberto@hotel.com", "21999999999", 7500.0, "Gerência", "senha123");
+        Administrador admin = new Administrador("Admin Roberto", "12345678900", "adminRoberto@hotel.com", 21999999999L, 7500.0, "Dono", "senha123");
         hotelSimulado = new Hotel("Hotel Paraíso, Oásis & Oceano", admin);
 
         hotelSimulado.carregarDados();
@@ -57,24 +57,24 @@ public class Programa {
             hotelSimulado.addFuncionario(admin);
 
             // +1 Administrador
-            Administrador admin2 = new Administrador("Julia Costa", "22233344455", "juliacosta@hotel.com", "21999888777", 6000.0, "Gerência", "senha123");
+            Administrador admin2 = new Administrador("Julia Costa", "22233344455", "juliacosta@hotel.com", 21999888777L, 6000.0, "Gerência", "senha123");
             hotelSimulado.addFuncionario(admin2);
 
             // 3 Funcionários Comuns
-            Funcionario funcionarioTeste = new Funcionario("Funcionario Joao", "11122233344", "joao@hotel.com", "16888888888", 2000.0, "Recepção", "senha123");
+            Funcionario funcionarioTeste = new Funcionario("Joao Gomes", "11122233344", "joao@hotel.com", 16888888888L, 2000.0, "Recepção", "senha123");
             hotelSimulado.addFuncionario(funcionarioTeste);
-            Funcionario comum2 = new Funcionario("Pedro Queixo", "33344455559", "pedroqueixo@hotel.com", "21999111222", 2900.0, "Recepção", "FuncPedroQ");
+            Funcionario comum2 = new Funcionario("Pedro Queixo", "33344455559", "pedroqueixo@hotel.com", 21999111222L, 2900.0, "Recepção", "FuncPedroQ");
             hotelSimulado.addFuncionario(comum2);
-            Funcionario comum3 = new Funcionario("Marta Silva", "44455566610", "marta10@hotel.com", "11999333444", 2200.0, "Recepção", "FuncMarta10");
+            Funcionario comum3 = new Funcionario("Marta Silva", "44455566610", "marta10@hotel.com", 11999333444L, 2200.0, "Recepção", "FuncMarta10");
             hotelSimulado.addFuncionario(comum3);
 
             // --- CADASTRANDO HÓSPEDES ---
-            Hospede hospedeTeste = new Hospede("Hospede Maria", "00011122233", "maria@gmail.com", "777777777", "Hospede123");
-            Hospede h2 = new Hospede("Carlos Miguel", "55566677788", "carlos@gmail.com", "999555666", "Hospede200");
-            Hospede h3 = new Hospede("Lucia Pereira", "66677788899", "lucia@gmail.com", "999777888", "Hospede203");
-            Hospede h4 = new Hospede("São Marcos", "77788899900", "marcos@gmail.com", "999999000", "Hospede99");
-            Hospede h5 = new Hospede("Phillipe Coutinho", "88899900011", "philcoutinho@gmail.com", "999000111", "Hospede11");
-            Hospede h6 = new Hospede("Bruno Henrique", "99900011122", "bh27@gmail.com", "999222333", "Hospede00");
+            Hospede hospedeTeste = new Hospede("Hospede Maria", "00011122233", "maria@gmail.com", 777777777L, "Hospede123");
+            Hospede h2 = new Hospede("Carlos Miguel", "55566677788", "carlos@gmail.com", 999555666L, "Hospede200");
+            Hospede h3 = new Hospede("Lucia Pereira", "66677788899", "lucia@gmail.com", 999777888L, "Hospede203");
+            Hospede h4 = new Hospede("São Marcos", "77788899900", "marcos@gmail.com", 999999000L, "Hospede99");
+            Hospede h5 = new Hospede("Phillipe Coutinho", "88899900011", "philcoutinho@gmail.com", 999000111L, "Hospede11");
+            Hospede h6 = new Hospede("Bruno Henrique", "99900011122", "bh27@gmail.com", 999222333L, "Hospede00");
 
             hotelSimulado.addHospede(hospedeTeste);
             hotelSimulado.addHospede(h2);

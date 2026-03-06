@@ -25,10 +25,4 @@ public class ChaleFamilia extends Quarto{
         int totalCamasEquivalente = camasSolteiro + (camasCasal * 2);
         return (getValorBase() * dias) + (20.00 * totalCamasEquivalente);
     }
-
-    @Override
-    public void exibir(){
-        super.exibir();
-        System.out.println("Camas -> Solteiro: " + this.camasSolteiro + " | Casal: " + this.camasCasal);
-    }
 }

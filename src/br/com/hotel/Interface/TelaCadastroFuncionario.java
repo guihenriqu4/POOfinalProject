@@ -4,6 +4,9 @@ import src.br.com.hotel.model.Pessoa.Funcionario;
 import src.br.com.hotel.model.Pessoa.Administrador;
 import src.br.com.hotel.services.Hotel;
 import src.br.com.hotel.exceptions.CamposInvalidosException;
+import src.br.com.hotel.exceptions.SalarioNegativoException;
+import src.br.com.hotel.exceptions.FormatoInvalidoException;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,37 +45,73 @@ public class TelaCadastroFuncionario {
         JButton btnSalvar = new JButton("Salvar");
         JButton btnLimpar = new JButton("Limpar");
 
+        //Açcão do botão limpar
+        btnLimpar.addActionListener(e -> {
+            //Limpa os campos de texto básicos (Nome, CPF, Email, Celular)
+            for (JTextField campo : camposPessoa) {
+                campo.setText("");
+            }
+
+            //Limpa campos específicos de funcionário
+            txtSalario.setText("");
+            txtSetor.setText("");
+            txtSenha.setText("");
+
+            //Reseta o nível de acesso para "Comum"
+            rbComum.setSelected(true);
+        });
+
         // Ação de salvamento
         btnSalvar.addActionListener(e -> {
             try {
                 String nome = camposPessoa[0].getText().trim();
                 String cpf = camposPessoa[1].getText().trim();
                 String email = camposPessoa[2].getText().trim();
-                String celular = camposPessoa[3].getText().trim();
-                String salario = txtSalario.getText().trim();
+                String celularTexto = camposPessoa[3].getText().trim();
+                String salarioTexto = txtSalario.getText().trim();
                 String setor = txtSetor.getText().trim();
                 String senha = new String(txtSenha.getPassword()).trim();
 
-                //Lança a excessão se tiver alguma caixa vazia ao salvar
-                if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celular.isEmpty() ||
-                        salario.isEmpty() || setor.isEmpty() || senha.isEmpty()) {
+                // 1. Validação de campos vazios
+                if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || celularTexto.isEmpty() ||
+                        salarioTexto.isEmpty() || setor.isEmpty() || senha.isEmpty()) {
                     throw new CamposInvalidosException("Por favor, preencha todos os campos antes de salvar!");
                 }
 
-                Funcionario novo;
-                // Instancia Administrador ou Funcionario comum com base no Radio Button (Polimorfismo/Herança)
-                if (rbAdmin.isSelected()) {
-                    novo = new Administrador(camposPessoa[0].getText(), camposPessoa[1].getText(), camposPessoa[2].getText(), camposPessoa[3].getText(), Double.parseDouble(txtSalario.getText()), txtSetor.getText(), new String(txtSenha.getPassword()));
-                } else {
-                    novo = new Funcionario(camposPessoa[0].getText(), camposPessoa[1].getText(), camposPessoa[2].getText(), camposPessoa[3].getText(), Double.parseDouble(txtSalario.getText()), txtSetor.getText(), new String(txtSenha.getPassword()));
+                // 2. Validação de formato (Transformando NumberFormatException na sua classe)
+                long celularLong;
+                double valorSalario;
+                try {
+                    celularLong = Long.parseLong(celularTexto);
+                    valorSalario = Double.parseDouble(salarioTexto);
+                } catch (NumberFormatException ex) {
+                    throw new FormatoInvalidoException("Salário e Celular devem conter apenas números!");
                 }
-                // Adiciona na lista principal do sistema
+
+                // 3. Validação de regra de negócio (Salário)
+                if (valorSalario <= 0) {
+                    throw new SalarioNegativoException("O salário não pode ser um valor negativo ou nulo!");
+                }
+
+                Funcionario novo;
+                // Instancia usando o celular convertido para long e o salário validado
+                if (rbAdmin.isSelected()) {
+                    novo = new Administrador(nome, cpf, email, celularLong, valorSalario, setor, senha);
+                } else {
+                    novo = new Funcionario(nome, cpf, email, celularLong, valorSalario, setor, senha);
+                }
+
                 hotel.addFuncionario(novo);
                 JOptionPane.showMessageDialog(painelCadastro, "Funcionário salvo!");
-            } catch (CamposInvalidosException ex){
-                JOptionPane.showMessageDialog(painelCadastro,ex.getMessage(), "Campos em Branco", JOptionPane.WARNING_MESSAGE);
+
+            } catch (CamposInvalidosException ex) {
+                JOptionPane.showMessageDialog(painelCadastro, ex.getMessage(), "Campos em Branco", JOptionPane.WARNING_MESSAGE);
+            } catch (FormatoInvalidoException ex) {
+                JOptionPane.showMessageDialog(painelCadastro, ex.getMessage(), "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+            } catch (SalarioNegativoException ex) {
+                JOptionPane.showMessageDialog(painelCadastro, ex.getMessage(), "Erro de Valor", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(painelCadastro, "Erro: Verifique se o salário é um número válido!","Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(painelCadastro, "Erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 
